@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.4.2" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.2" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.4.2',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="WebApplicationContext 中特殊的 bean 类型（一）— 请求/异常处理1 前言其实 Spring 的基本思想就是“万物都是 bean”，那么为了满足 spring 工程的需要，spring 中有一些默认的 bean 选项，它们用于处理请求，渲染视图等。比如上一篇文章就用过的 viewResolver 的配置。当然，servlet 也允许你配置使用不同特定的 bean，但是，如">
+<meta property="og:type" content="article">
+<meta property="og:title" content="弯路">
+<meta property="og:url" content="http://yoursite.com/2018/10/29/Spring MVC 4.2.4 文档实践(二)--请求_异常处理/index.html">
+<meta property="og:site_name" content="弯路">
+<meta property="og:description" content="WebApplicationContext 中特殊的 bean 类型（一）— 请求/异常处理1 前言其实 Spring 的基本思想就是“万物都是 bean”，那么为了满足 spring 工程的需要，spring 中有一些默认的 bean 选项，它们用于处理请求，渲染视图等。比如上一篇文章就用过的 viewResolver 的配置。当然，servlet 也允许你配置使用不同特定的 bean，但是，如">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/Users/shenruofan/Desktop/屏幕快照%202018-10-30%20上午10.40.30.png">
+<meta property="og:updated_time" content="2018-11-07T08:00:22.763Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="弯路">
+<meta name="twitter:description" content="WebApplicationContext 中特殊的 bean 类型（一）— 请求/异常处理1 前言其实 Spring 的基本思想就是“万物都是 bean”，那么为了满足 spring 工程的需要，spring 中有一些默认的 bean 选项，它们用于处理请求，渲染视图等。比如上一篇文章就用过的 viewResolver 的配置。当然，servlet 也允许你配置使用不同特定的 bean，但是，如">
+<meta name="twitter:image" content="http://yoursite.com/Users/shenruofan/Desktop/屏幕快照%202018-10-30%20上午10.40.30.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="弯路" type="application/atom+xml">
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/10/29/Spring MVC 4.2.4 文档实践(二)--请求_异常处理/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title> | 弯路</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">弯路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/29/Spring MVC 4.2.4 文档实践(二)--请求_异常处理/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Ruofan Shen">
+      <meta itemprop="description" content="我多走的弯路，你少走一点">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="弯路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-10-29 14:21:01" itemprop="dateCreated datePublished" datetime="2018-10-29T14:21:01+08:00">2018-10-29</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-11-07 16:00:22" itemprop="dateModified" datetime="2018-11-07T16:00:22+08:00">2018-11-07</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="WebApplicationContext-中特殊的-bean-类型（一）—-请求-异常处理"><a href="#WebApplicationContext-中特殊的-bean-类型（一）—-请求-异常处理" class="headerlink" title="WebApplicationContext 中特殊的 bean 类型（一）— 请求/异常处理"></a>WebApplicationContext 中特殊的 bean 类型（一）— 请求/异常处理</h1><h2 id="1-前言"><a href="#1-前言" class="headerlink" title="1 前言"></a>1 前言</h2><p>其实 Spring 的基本思想就是“万物都是 bean”，那么为了满足 spring 工程的需要，spring 中有一些默认的 bean 选项，它们用于处理请求，渲染视图等。比如上一篇文章就用过的 <strong>viewResolver</strong> 的配置。当然，servlet 也允许你配置使用不同特定的 bean，但是，如果你没有配置，spring 将会按照默认的 bean 进行配置。本章将会详细说明文档中列出的 bean 的配置以及具体的使用例子，所讲述的 bean 类型包括：（使用版本：Spring-webmvc 3.2.14.RELEASE）</p>
+<ul>
+<li><a href="https://linesh.gitbooks.io/spring-mvc-documentation-linesh-translation/content/publish/21-4/handler-mappings.html" target="_blank" rel="noopener"><code>HandlerMapping</code></a> 和 HandlerAdapter</li>
+<li><a href="https://linesh.gitbooks.io/spring-mvc-documentation-linesh-translation/content/publish/21-11/1-handler-exception-handler.html" target="_blank" rel="noopener"><code>HandlerExceptionResolver</code></a></li>
+<li><a href="https://linesh.gitbooks.io/spring-mvc-documentation-linesh-translation/content/publish/21-8/using-locales.html" target="_blank" rel="noopener"><code>LocaleResolver</code></a> &amp; <a href="https://linesh.gitbooks.io/spring-mvc-documentation-linesh-translation/content/publish/21-8/1-obtaining-time-zone-information.html" target="_blank" rel="noopener"><code>LocaleContextResolver</code></a></li>
+<li><a href="https://linesh.gitbooks.io/spring-mvc-documentation-linesh-translation/content/publish/21-9/1-overview-of-themes.html" target="_blank" rel="noopener"><code>ThemeResolver</code></a></li>
+<li><a href="https://linesh.gitbooks.io/spring-mvc-documentation-linesh-translation/content/publish/21-10/springs-multipart-file-upload-support.html" target="_blank" rel="noopener"><code>MultipartResolver</code></a></li>
+</ul>
+<p>首先上一张路径图，用于对照</p>
+<p><img src="/Users/shenruofan/Desktop/屏幕快照 2018-10-30 上午10.40.30.png" alt="路径图"></p>
+<h2 id="2-HandlerAdapter-和-HandlerMapping-解析"><a href="#2-HandlerAdapter-和-HandlerMapping-解析" class="headerlink" title="2 HandlerAdapter 和 HandlerMapping 解析"></a>2 HandlerAdapter 和 HandlerMapping 解析</h2><h3 id="2-1-前期准备"><a href="#2-1-前期准备" class="headerlink" title="2.1 前期准备"></a>2.1 前期准备</h3><p>本章节将基于文档实践（一）的代码进行后续的操作，因此我们使用了单个 ContextConfig 来配置工程 Context 对象，也就是 root-context.xml 文件。另一方面，为了实现 HandlerMapping 在 xml 配置的功能，我们关掉了 </p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mvc:annotation-driven</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+<p>的功能，使得 @Controller 注解下的类不再会被自动配置并且做 url 的映射，现在再去试一下 localhost:8080/hello.do 的话，已经是 404 Not Found 了。之后再进行后续的实践过程。</p>
+<p>这里 HandlerMapping 和 HandlerAdapter 一起讲是因为，HandlerMapping 需要 HandlerAdapter 的支持才能正常运行。HandlerMapping 用于将请求的 url 映射到对应的 controller 上面，如果没有进行配置的话，<strong>@Controller</strong> 注解即为 HandlerMapping，上一篇的 <strong>ExampleController</strong> 即有着和上述相似的功能。值得注意的是，Spring MVC 4.0 之后主推 Annotation Driven，也就是注解驱动模式下的工程，因此，对应的 adapter 已经标记为 deprecated，不推荐使用，这里只做帮助理解使用。</p>
+<h3 id="2-2-HandlerAdapter"><a href="#2-2-HandlerAdapter" class="headerlink" title="2.2 HandlerAdapter"></a>2.2 HandlerAdapter</h3><p>由于工程中的 Controller 都是用注解配置的，因此，在 DispatcherServlet 根据 bean 的配置信息（root-context.xml，我们用 Context 对象来配置 bean 的信息）知道了自己所需要调用的 controller 之后，他需要根据注解来提取其他的所需要的信息。这时候就需要 HandlerAdapter  来做这些解析的事情。</p>
+<p>然而，目前的 Spring MVC 的配置都基于注解，因此，HandlerAdapter 也退居幕后，@Controller 注解包含了其中逻辑，在 Annotation-driven 被我们关掉的场景下，也只要做好 HandlerMapping，就可以成功地映射你想要的 url </p>
+<h3 id="2-3-HandlerMapping"><a href="#2-3-HandlerMapping" class="headerlink" title="2.3 HandlerMapping"></a>2.3 HandlerMapping</h3><p>HandlerMapping 本质还是一个 Bean，他在 Spring MVC 装配完成之后，执行着将 URL 的请求转发到对应的 Controller 执行后续视图，数据等返回的工作。因此，在配置 HandlerMapping Bean 的时候，需要配置 property 的 mappings 字段，并且在 <prop> 字段下面指定对应的请求映射。具体代码如下：</prop></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">class</span>=<span class="string">"org.springframework.web.servlet.handler.SimpleUrlHandlerMapping"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"mappings"</span>&gt;</span></span><br><span class="line">     	<span class="tag">&lt;<span class="name">props</span>&gt;</span></span><br><span class="line">         	<span class="tag">&lt;<span class="name">prop</span> <span class="attr">key</span>=<span class="string">"/handler-mapping.do"</span>&gt;</span>handlerMappingController<span class="tag">&lt;/<span class="name">prop</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">props</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-4-HandlerAdapter-和-HandlerMapping-的测试"><a href="#2-4-HandlerAdapter-和-HandlerMapping-的测试" class="headerlink" title="2.4 HandlerAdapter 和 HandlerMapping 的测试"></a>2.4 HandlerAdapter 和 HandlerMapping 的测试</h3><p>为了同步一下，目前 root-context.xml (Spring Context 对象配置文件) 的配置加入了 HandlerMapping 的配置：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns</span>=<span class="string">"http://www.springframework.org/schema/beans"</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:context</span>=<span class="string">"http://www.springframework.org/schema/context"</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span> <span class="attr">xmlns:p</span>=<span class="string">"http://www.springframework.org/schema/p"</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:mvc</span>=<span class="string">"http://www.springframework.org/schema/mvc"</span> <span class="attr">xmlns:tx</span>=<span class="string">"http://www.springframework.org/schema/c"</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://www.springframework.org/schema/beans</span></span></span><br><span class="line"><span class="tag"><span class="string">            http://www.springframework.org/schema/beans/spring-beans-3.2.xsd</span></span></span><br><span class="line"><span class="tag"><span class="string">            http://www.springframework.org/schema/context</span></span></span><br><span class="line"><span class="tag"><span class="string">            http://www.springframework.org/schema/context/spring-context-3.2.xsd</span></span></span><br><span class="line"><span class="tag"><span class="string">            http://www.springframework.org/schema/mvc</span></span></span><br><span class="line"><span class="tag"><span class="string">            http://www.springframework.org/schema/mvc/spring-mvc.xsd"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">context:component-scan</span> <span class="attr">base-package</span>=<span class="string">"com.test.myapp.example"</span>/&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!--注册一个用于 handlerMapping 的 bean 用于检测 handlerMapping 效果--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"handlerMappingController"</span> <span class="attr">class</span>=<span class="string">"com.test.myapp.example.handlermapping.HandlerMappingController"</span>/&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">class</span>=<span class="string">"org.springframework.web.servlet.handler.SimpleUrlHandlerMapping"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"mappings"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">props</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">prop</span> <span class="attr">key</span>=<span class="string">"/handler-mapping.do"</span>&gt;</span>handlerMappingController<span class="tag">&lt;/<span class="name">prop</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">props</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&lt;!--&lt;bean id="simpleHandler" class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter"/&gt;--&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--&lt;mvc:annotation-driven/&gt;--&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">class</span>=<span class="string">"org.springframework.web.servlet.view.InternalResourceViewResolver"</span></span></span><br><span class="line"><span class="tag">          <span class="attr">p:prefix</span>=<span class="string">"/WEB-INF/views/"</span> <span class="attr">p:suffix</span>=<span class="string">".jsp"</span> <span class="attr">p:order</span>=<span class="string">"1"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>并且新增了 HandlerMappingController.java 的配置：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.test.myapp.example.handlermapping;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Controller;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RequestMapping;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RequestMethod;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Usage: 测试 handler mapping 的有效性</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span>: srfan</span></span><br><span class="line"><span class="comment"> * Date: 10/26/18 4:11 PM</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HandlerMappingController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(value=<span class="string">"/handler-mapping.do"</span>, method = RequestMethod.GET)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">helloWorld</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"handler_mapping_hello"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们看到，HandlerMapping 下面配置了 <strong>/handler-mapping.do</strong> 的映射。因此，在运行工程之后，输入 localhost:8080/handler-mapping.do，就可以看到对应的 handler_mapping_hello.jsp 上的前端视图返回。</p>
+<h2 id="3-HandlerExceptionResolver-解析"><a href="#3-HandlerExceptionResolver-解析" class="headerlink" title="3 HandlerExceptionResolver 解析"></a>3 HandlerExceptionResolver 解析</h2><p>HandlerExceptionResolver 是工程中用于捕获特定 Exception 的 Bean，可以提前设定自己需要捕获并且定向的 Exception，并且交由 HandlerExceptionResolver 映射到特定的视图页上面。 目前常用的方法有：</p>
+<ul>
+<li>实现 HandlerExceptionResolver 接口</li>
+<li>在方法上使用 @ExceptionHandler 注解</li>
+</ul>
+<h3 id="3-1-实现-HandlerExceptionResolver-接口"><a href="#3-1-实现-HandlerExceptionResolver-接口" class="headerlink" title="3.1 实现 HandlerExceptionResolver 接口"></a>3.1 实现 HandlerExceptionResolver 接口</h3><p>HandlerExceptionResolver 接口只有一个待实现的方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">ModelAndView <span class="title">resolveException</span><span class="params">(HttpServletRequest var1, HttpServletResponse var2, Object var3, Exception var4)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>为了工程上面比较直观简便的实现，我们只需要做最简单的实现：拿到 Exception 的具体类，并且返回对应的 error 的视图，并且记录下 Exception 的 message，显示在视图页面上面。因此我们的工序如下：</p>
+<h4 id="3-1-1-实现一个自定义的-Exception-MyCustomException"><a href="#3-1-1-实现一个自定义的-Exception-MyCustomException" class="headerlink" title="3.1.1 实现一个自定义的 Exception: MyCustomException"></a>3.1.1 实现一个自定义的 Exception: MyCustomException</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.test.myapp.example.handlermapping;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyCustomException</span> <span class="keyword">extends</span> <span class="title">RuntimeException</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyCustomException</span><span class="params">(String msg)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(msg);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个 Exception 类很简单，只是把 message 放进 Exception 中，无需赘述，主要是要让 ExceptionResolver 捕获该 Exception。</p>
+<h4 id="3-1-2-实现-HandlerExceptionResolver-接口：ExceptionResolver"><a href="#3-1-2-实现-HandlerExceptionResolver-接口：ExceptionResolver" class="headerlink" title="3.1.2 实现 HandlerExceptionResolver 接口：ExceptionResolver"></a>3.1.2 实现 HandlerExceptionResolver 接口：ExceptionResolver</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.test.myapp.example.handlermapping;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Component;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.servlet.HandlerExceptionResolver;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.servlet.ModelAndView;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletRequest;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletResponse;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ExceptionResolver</span> <span class="keyword">implements</span> <span class="title">HandlerExceptionResolver</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> ModelAndView <span class="title">resolveException</span><span class="params">(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (e <span class="keyword">instanceof</span> MyCustomException) &#123;</span><br><span class="line">            ModelAndView modelAndView = <span class="keyword">new</span> ModelAndView(<span class="string">"error"</span>);</span><br><span class="line">            modelAndView.addObject(<span class="string">"msg"</span>, e.getMessage());</span><br><span class="line">            <span class="keyword">return</span> modelAndView;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们使用 ExceptionResolver 实现了 resolveException 方法，并且会解析 MyCustomException 并且在 ModelAndView 对象加入一个变量，并且返回名为 “error” 的 jsp 视图。我们也可以在 error.jsp 上显示这个 msg 字段的信息。</p>
+<h4 id="3-1-3-HandlerMappingController-添加两个会抛出-Exception-的接口"><a href="#3-1-3-HandlerMappingController-添加两个会抛出-Exception-的接口" class="headerlink" title="3.1.3 HandlerMappingController 添加两个会抛出 Exception 的接口"></a>3.1.3 HandlerMappingController 添加两个会抛出 Exception 的接口</h4><p>为了对照效果，我们实现两个接口，一个会抛出 MyCustomException，另一个则会抛出普通的 IllegalArgumentException，而我们需要捕获的则是 MyCustomException。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.test.myapp.example.handlermapping;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Controller;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RequestMapping;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RequestMethod;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HandlerMappingController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(value=<span class="string">"/handler-mapping.do"</span>, method = RequestMethod.GET)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">helloWorld</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"handler_mapping_hello"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(value=<span class="string">"/custom-exception.do"</span>, method = RequestMethod.GET)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">throwException</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> MyCustomException(<span class="string">"oh, you got custom exception message~!"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(value=<span class="string">"/argument-exception.do"</span>, method = RequestMethod.GET)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">throwArgumentException</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"oh, you got argument exception message~!"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="3-1-4-视图文件-error-jsp-配置"><a href="#3-1-4-视图文件-error-jsp-配置" class="headerlink" title="3.1.4 视图文件 error.jsp 配置"></a>3.1.4 视图文件 error.jsp 配置</h4><p>视图文件 error.jsp 比较简单，只要体现 msg 字段即可：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">%@</span> <span class="attr">page</span> <span class="attr">contentType</span>=<span class="string">"text/html;charset=UTF-8"</span> <span class="attr">language</span>=<span class="string">"java"</span> %&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Ooooops, you meet MyCustomException<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>$&#123;msg&#125;<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="3-1-5-测试"><a href="#3-1-5-测试" class="headerlink" title="3.1.5 测试"></a>3.1.5 测试</h4><p>运行工程后，在浏览器分别输入：</p>
+<ul>
+<li><a href="http://localhost:8080/custom-exception.do：浏览器返回了" target="_blank" rel="noopener">http://localhost:8080/custom-exception.do：浏览器返回了</a> error.jsp 的视图并且输出了包裹在 MyCustomException 的信息，符合预期</li>
+<li><a href="http://localhost:8080/argument-exception.do：浏览器返回了" target="_blank" rel="noopener">http://localhost:8080/argument-exception.do：浏览器返回了</a> 500 Internal Server Error，因为没有用于 IllegalArgumentException 的 resolver，因此返回了默认的视图。</li>
+</ul>
+<h3 id="3-2-使用-ExceptionHandler-注解"><a href="#3-2-使用-ExceptionHandler-注解" class="headerlink" title="3.2 使用 @ExceptionHandler 注解"></a>3.2 使用 @ExceptionHandler 注解</h3><p>另一种方法是使用 @ExceptionHandler 的注解，该注解用于 method 的签名上面，我们可以实现一个 Controller 的基类并让实际接收 url 请求的 Controller 继承该基类。<strong>值得注意的是</strong>，这个方法实现的 ExceptionResolver 只会在该 Controller 内部有效，而来自其他 Controller 类的 Exception 则无法得到解析。具体代码步骤如下：</p>
+<h4 id="3-2-1-设置自定义-Exception-CustomExceptionForAnnotation"><a href="#3-2-1-设置自定义-Exception-CustomExceptionForAnnotation" class="headerlink" title="3.2.1 设置自定义 Exception: CustomExceptionForAnnotation"></a>3.2.1 设置自定义 Exception: CustomExceptionForAnnotation</h4><p>我们为这一次测试也设置了自定义的 Exception 类，实现方法也很简单，可以自定义 Exception 中的信息：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.test.myapp.example.exceptionresolver;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CustomExceptionForAnnotation</span> <span class="keyword">extends</span> <span class="title">RuntimeException</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CustomExceptionForAnnotation</span><span class="params">(String msg)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(msg);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="3-2-2-实现有-ExceptionHandler-注解的-Controller-基类"><a href="#3-2-2-实现有-ExceptionHandler-注解的-Controller-基类" class="headerlink" title="3.2.2 实现有 @ExceptionHandler 注解的 Controller 基类"></a>3.2.2 实现有 @ExceptionHandler 注解的 Controller 基类</h4><p>我们的 Controller 基类需要 Resolve CustomExceptionForAnnotation，需要用 <strong>@ExceptionHandler(CustomExceptionForAnnotation.class)</strong> 进行配置，具体方法如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.test.myapp.example.exceptionresolver;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.ExceptionHandler;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.servlet.ModelAndView;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">BaseExceptionResolver</span> </span>&#123;</span><br><span class="line">    <span class="meta">@ExceptionHandler</span>(&#123;CustomExceptionForAnnotation.class&#125;)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> ModelAndView <span class="title">handleCustomException</span><span class="params">(CustomExceptionForAnnotation ex)</span> </span>&#123;</span><br><span class="line">        ModelAndView modelAndView = <span class="keyword">new</span> ModelAndView(<span class="string">"error"</span>);</span><br><span class="line">        modelAndView.addObject(<span class="string">"msg"</span>, ex.getMessage());</span><br><span class="line">        <span class="keyword">return</span> modelAndView;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，该类中所含有的方法仅会解析 CustomExceptionForAnnotation 类，并且将其重新导向 error.jsp 视图，最后输出对应的 message 信息到前端。</p>
+<h4 id="3-2-3-实现两个-Controller-类"><a href="#3-2-3-实现两个-Controller-类" class="headerlink" title="3.2.3 实现两个 Controller 类"></a>3.2.3 实现两个 Controller 类</h4><p>为了使测试结果有对照性，我们实现了两个 Controller 类，一个继承自 BaseExceptionResolver，另一个则没有。理论上说，继承了 BaseExceptionResolver 的 Controller 将可以解析上面的 Exception，而另一个则不能。具体的配置方法如下：</p>
+<ul>
+<li><p>继承了 BaseExceptionResolver 的 Controller 类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.test.myapp.example.exceptionresolver;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Controller;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RequestMapping;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyExceptionController</span> <span class="keyword">extends</span> <span class="title">BaseExceptionResolver</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"exception-for-annotation.do"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">exceptionForAnnotation</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> CustomExceptionForAnnotation(<span class="string">"Oooops, you get CustomExceptionForAnnotation message"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>未继承 BaseExceptionResolver:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.test.myapp.example.exceptionresolver;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Controller;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RequestMapping;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyExceptionOutsideController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"exception-for-annotation-outside.do"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">exceptionForAnnotation</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> CustomExceptionForAnnotation(<span class="string">"Oooops, you get CustomExceptionForAnnotation message"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="3-2-4-测试"><a href="#3-2-4-测试" class="headerlink" title="3.2.4 测试"></a>3.2.4 测试</h4><p>我们仍然使用了 error.jsp 视图来做最后的测试工作，我们看到 BaseExceptionResolver 在捕获异常后，仍然会输出 error.jsp 的视图。我们将会请求两个具体 Controller 类的 url，观察是否会有我们想要的视图的输出：</p>
+<ul>
+<li>localhost:8080/exception-for-annotation.do: 成功输出了我们放入 CustomExceptionForAnnotation 的信息。</li>
+<li>localhost:8080/exception-for-annotation-outside.do: 页面输出了 500 的错误信息，并且带上了 Exception 中的信息，因为其没有继承 BaseExceptionResolver，因此也没有对应的 Exception 解析器了。</li>
+</ul>
+<h2 id="4-小结"><a href="#4-小结" class="headerlink" title="4 小结"></a>4 小结</h2><p>本章主要讲述了 HandlerMapping 和 HandlerExceptionResolver 的具体实现代码，一个是处理正常的 url 请求的映射工具，而另一个则是专门处理工程在运行过程中出现 Exception 的处理方法。下一次我将继续介绍后面这几个特殊 Bean 的用法。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/12/Spring MVC 4.2.4 文档实践(一)/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/01/Spring MVC 4.2.4 文档实践(三)--LocaleResolver/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="Ruofan Shen">
+            
+              <p class="site-author-name" itemprop="name">Ruofan Shen</p>
+              <p class="site-description motion-element" itemprop="description">我多走的弯路，你少走一点</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#WebApplicationContext-中特殊的-bean-类型（一）—-请求-异常处理"><span class="nav-number">1.</span> <span class="nav-text">WebApplicationContext 中特殊的 bean 类型（一）— 请求/异常处理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-前言"><span class="nav-number">1.1.</span> <span class="nav-text">1 前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-HandlerAdapter-和-HandlerMapping-解析"><span class="nav-number">1.2.</span> <span class="nav-text">2 HandlerAdapter 和 HandlerMapping 解析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-前期准备"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 前期准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-HandlerAdapter"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 HandlerAdapter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-HandlerMapping"><span class="nav-number">1.2.3.</span> <span class="nav-text">2.3 HandlerMapping</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-HandlerAdapter-和-HandlerMapping-的测试"><span class="nav-number">1.2.4.</span> <span class="nav-text">2.4 HandlerAdapter 和 HandlerMapping 的测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-HandlerExceptionResolver-解析"><span class="nav-number">1.3.</span> <span class="nav-text">3 HandlerExceptionResolver 解析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-实现-HandlerExceptionResolver-接口"><span class="nav-number">1.3.1.</span> <span class="nav-text">3.1 实现 HandlerExceptionResolver 接口</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-1-实现一个自定义的-Exception-MyCustomException"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">3.1.1 实现一个自定义的 Exception: MyCustomException</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-2-实现-HandlerExceptionResolver-接口：ExceptionResolver"><span class="nav-number">1.3.1.2.</span> <span class="nav-text">3.1.2 实现 HandlerExceptionResolver 接口：ExceptionResolver</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-3-HandlerMappingController-添加两个会抛出-Exception-的接口"><span class="nav-number">1.3.1.3.</span> <span class="nav-text">3.1.3 HandlerMappingController 添加两个会抛出 Exception 的接口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-4-视图文件-error-jsp-配置"><span class="nav-number">1.3.1.4.</span> <span class="nav-text">3.1.4 视图文件 error.jsp 配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-5-测试"><span class="nav-number">1.3.1.5.</span> <span class="nav-text">3.1.5 测试</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-使用-ExceptionHandler-注解"><span class="nav-number">1.3.2.</span> <span class="nav-text">3.2 使用 @ExceptionHandler 注解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-1-设置自定义-Exception-CustomExceptionForAnnotation"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">3.2.1 设置自定义 Exception: CustomExceptionForAnnotation</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-2-实现有-ExceptionHandler-注解的-Controller-基类"><span class="nav-number">1.3.2.2.</span> <span class="nav-text">3.2.2 实现有 @ExceptionHandler 注解的 Controller 基类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-3-实现两个-Controller-类"><span class="nav-number">1.3.2.3.</span> <span class="nav-text">3.2.3 实现两个 Controller 类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-4-测试"><span class="nav-number">1.3.2.4.</span> <span class="nav-text">3.2.4 测试</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-小结"><span class="nav-number">1.4.</span> <span class="nav-text">4 小结</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ruofan Shen</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Mist</a> v6.4.2</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.2"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
