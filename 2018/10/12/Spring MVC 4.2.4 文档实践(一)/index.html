@@ -108,22 +108,19 @@
 
 
 
-  <meta name="description" content="Spring MVC 4.2.4 文档实践（一）1 前言本文基于 Spring MVC 4.2.4 的中文翻译文档，并在一定基础加上一部分的说明与实践，力求把文档中的内容反映到具体程序上，毕竟 TALK IS CHEAP, SHOW ME THE CODE. 希望通过这个文档的记录，可以把自己对于 Spring MVC 文档的一些理解分享给大家。 本文按照 Spring MVC 文档的次序，依次进">
+  <meta name="description" content="本文将开启一个专题，讲述自己在学习 Spring MVC 文档的过程中的所思所想，以及相关知识点的背后的原理，源码的解析，希望可以帮助加深对 Spring 文档的理解。本文记录了如何开始一个 Spring MVC 工程，为后续的拓展做准备。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="弯路">
+<meta property="og:title" content="Spring MVC 4.2.4 文档实践（一）">
 <meta property="og:url" content="http://yoursite.com/2018/10/12/Spring MVC 4.2.4 文档实践(一)/index.html">
 <meta property="og:site_name" content="弯路">
-<meta property="og:description" content="Spring MVC 4.2.4 文档实践（一）1 前言本文基于 Spring MVC 4.2.4 的中文翻译文档，并在一定基础加上一部分的说明与实践，力求把文档中的内容反映到具体程序上，毕竟 TALK IS CHEAP, SHOW ME THE CODE. 希望通过这个文档的记录，可以把自己对于 Spring MVC 文档的一些理解分享给大家。 本文按照 Spring MVC 文档的次序，依次进">
+<meta property="og:description" content="本文将开启一个专题，讲述自己在学习 Spring MVC 文档的过程中的所思所想，以及相关知识点的背后的原理，源码的解析，希望可以帮助加深对 Spring 文档的理解。本文记录了如何开始一个 Spring MVC 工程，为后续的拓展做准备。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://linesh.gitbooks.io/spring-mvc-documentation-linesh-translation/content/publish/21-2/figures/figure-21-1-the-request-processing-workflow-in-spring-web-mvc.jpg">
-<meta property="og:image" content="http://yoursite.com/Users/shenruofan/Desktop/屏幕快照%202018-10-22%20下午5.51.03.png">
-<meta property="og:image" content="http://yoursite.com/Users/shenruofan/Desktop/屏幕快照%202018-10-23%20下午3.09.32.png">
-<meta property="og:image" content="http://yoursite.com/Users/shenruofan/Desktop/屏幕快照%202018-10-23%20下午3.09.32.png">
-<meta property="og:updated_time" content="2018-10-24T14:54:10.623Z">
+<meta property="og:image" content="https://www.tutorialspoint.com/springmvc/images/springmvc-mini-logo.jpg">
+<meta property="og:updated_time" content="2018-11-19T01:41:49.135Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="弯路">
-<meta name="twitter:description" content="Spring MVC 4.2.4 文档实践（一）1 前言本文基于 Spring MVC 4.2.4 的中文翻译文档，并在一定基础加上一部分的说明与实践，力求把文档中的内容反映到具体程序上，毕竟 TALK IS CHEAP, SHOW ME THE CODE. 希望通过这个文档的记录，可以把自己对于 Spring MVC 文档的一些理解分享给大家。 本文按照 Spring MVC 文档的次序，依次进">
-<meta name="twitter:image" content="https://linesh.gitbooks.io/spring-mvc-documentation-linesh-translation/content/publish/21-2/figures/figure-21-1-the-request-processing-workflow-in-spring-web-mvc.jpg">
+<meta name="twitter:title" content="Spring MVC 4.2.4 文档实践（一）">
+<meta name="twitter:description" content="本文将开启一个专题，讲述自己在学习 Spring MVC 文档的过程中的所思所想，以及相关知识点的背后的原理，源码的解析，希望可以帮助加深对 Spring 文档的理解。本文记录了如何开始一个 Spring MVC 工程，为后续的拓展做准备。">
+<meta name="twitter:image" content="https://www.tutorialspoint.com/springmvc/images/springmvc-mini-logo.jpg">
 
 
 
@@ -142,7 +139,7 @@
   };
 </script>
 
-  <title> | 弯路</title>
+  <title>Spring MVC 4.2.4 文档实践（一） | 弯路</title>
   
 
 
@@ -312,7 +309,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h1 class="post-title" itemprop="name headline">Spring MVC 4.2.4 文档实践（一）
               
             
           </h1>
@@ -354,7 +351,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-10-24 22:54:10" itemprop="dateModified" datetime="2018-10-24T22:54:10+08:00">2018-10-24</time>
+                <time title="修改时间：2018-11-19 09:41:49" itemprop="dateModified" datetime="2018-11-19T09:41:49+08:00">2018-11-19</time>
               
             
           </span>
@@ -362,8 +359,6 @@
           
 
           
-            
-          
 
           
           
@@ -372,6 +367,8 @@
 
           
 
+          
+              <div class="post-description">本文将开启一个专题，讲述自己在学习 Spring MVC 文档的过程中的所思所想，以及相关知识点的背后的原理，源码的解析，希望可以帮助加深对 Spring 文档的理解。本文记录了如何开始一个 Spring MVC 工程，为后续的拓展做准备。</div>
           
 
         </div>
@@ -385,9 +382,23 @@
 
       
       
+        <div class="post-gallery" itemscope="" itemtype="http://schema.org/ImageGallery">
+          
+          
+            <div class="post-gallery-row">
+              <a class="post-gallery-img fancybox" href="https://www.tutorialspoint.com/springmvc/images/springmvc-mini-logo.jpg" rel="gallery_cjopv0zl60002mkcaysmgcxky" itemscope="" itemtype="http://schema.org/ImageObject" itemprop="url">
+                <img src="https://www.tutorialspoint.com/springmvc/images/springmvc-mini-logo.jpg" itemprop="contentUrl">
+              </a>
+            
+          
+
+          
+          </div>
+        </div>
+      
 
       
-        <h1 id="Spring-MVC-4-2-4-文档实践（一）"><a href="#Spring-MVC-4-2-4-文档实践（一）" class="headerlink" title="Spring MVC 4.2.4 文档实践（一）"></a>Spring MVC 4.2.4 文档实践（一）</h1><h2 id="1-前言"><a href="#1-前言" class="headerlink" title="1 前言"></a>1 前言</h2><p>本文基于 Spring MVC 4.2.4 的中文翻译文档，并在一定基础加上一部分的说明与实践，力求把文档中的内容反映到具体程序上，毕竟 TALK IS CHEAP, SHOW ME THE CODE. 希望通过这个文档的记录，可以把自己对于 Spring MVC 文档的一些理解分享给大家。</p>
+        <h2 id="1-前言"><a href="#1-前言" class="headerlink" title="1 前言"></a>1 前言</h2><p>本文基于 Spring MVC 4.2.4 的中文翻译文档，并在一定基础加上一部分的说明与实践，力求把文档中的内容反映到具体程序上，毕竟 TALK IS CHEAP, SHOW ME THE CODE. 希望通过这个文档的记录，可以把自己对于 Spring MVC 文档的一些理解分享给大家。</p>
 <p>本文按照 Spring MVC 文档的次序，依次进行讲述。</p>
 <h2 id="2-前期准备"><a href="#2-前期准备" class="headerlink" title="2 前期准备"></a>2 前期准备</h2><h3 id="初始化-maven-工程"><a href="#初始化-maven-工程" class="headerlink" title="初始化 maven 工程"></a>初始化 maven 工程</h3><p>使用 Intellij 新建工程选项，在 maven 选项卡里面选择 maven-archetype-webapp，输入对应的工程名，点击创建，可以得到一个已经初始化了 webapp 文件。</p>
 <h3 id="工程目录初始化设置"><a href="#工程目录初始化设置" class="headerlink" title="工程目录初始化设置"></a>工程目录初始化设置</h3><p>在 main 文件夹下，分别创建 java 和 resources 文件夹，点击 File - Project Structure，将 main 和 resources 设置为 Source Folders (蓝色)，和 Resource Folder (紫色)。</p>
@@ -487,8 +498,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/10/29/Spring MVC 4.2.4 文档实践(二)--请求_异常处理/" rel="prev" title="">
-                 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/10/29/Spring MVC 4.2.4 文档实践(二)--请求_异常处理/" rel="prev" title="WebApplicationContext 中特殊的 bean 类型（一）--- 请求/异常处理">
+                WebApplicationContext 中特殊的 bean 类型（一）--- 请求/异常处理 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -510,10 +521,6 @@
 
           </div>
           
-
-  
-
-
 
         </div>
         
@@ -608,7 +615,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-MVC-4-2-4-文档实践（一）"><span class="nav-number">1.</span> <span class="nav-text">Spring MVC 4.2.4 文档实践（一）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-前言"><span class="nav-number">1.1.</span> <span class="nav-text">1 前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-前期准备"><span class="nav-number">1.2.</span> <span class="nav-text">2 前期准备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化-maven-工程"><span class="nav-number">1.2.1.</span> <span class="nav-text">初始化 maven 工程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#工程目录初始化设置"><span class="nav-number">1.2.2.</span> <span class="nav-text">工程目录初始化设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#maven-依赖"><span class="nav-number">1.2.3.</span> <span class="nav-text">maven 依赖</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Spring-MVC-用-DispatcherServlet-处理请求"><span class="nav-number">1.3.</span> <span class="nav-text">3 Spring MVC 用 DispatcherServlet 处理请求</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-DispatcherServlet-创建"><span class="nav-number">1.3.1.</span> <span class="nav-text">3.1 DispatcherServlet 创建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-example-servlet-的配置"><span class="nav-number">1.3.2.</span> <span class="nav-text">3.2 example-servlet 的配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-配置-Controller-和-jsp"><span class="nav-number">1.3.3.</span> <span class="nav-text">3.3 配置 Controller 和 jsp</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-配置根-context-对象代替-Servlet-xml"><span class="nav-number">1.4.</span> <span class="nav-text">4 配置根 context 对象代替 Servlet.xml</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-配置-Root-Context"><span class="nav-number">1.4.1.</span> <span class="nav-text">4.1 配置 Root Context</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-RootContext-xml-和-Servlet-xml-的差别"><span class="nav-number">1.4.2.</span> <span class="nav-text">4.2 RootContext.xml 和 Servlet.xml 的差别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-总结"><span class="nav-number">1.5.</span> <span class="nav-text">5 总结</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-前言"><span class="nav-number">1.</span> <span class="nav-text">1 前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-前期准备"><span class="nav-number">2.</span> <span class="nav-text">2 前期准备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化-maven-工程"><span class="nav-number">2.1.</span> <span class="nav-text">初始化 maven 工程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#工程目录初始化设置"><span class="nav-number">2.2.</span> <span class="nav-text">工程目录初始化设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#maven-依赖"><span class="nav-number">2.3.</span> <span class="nav-text">maven 依赖</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Spring-MVC-用-DispatcherServlet-处理请求"><span class="nav-number">3.</span> <span class="nav-text">3 Spring MVC 用 DispatcherServlet 处理请求</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-DispatcherServlet-创建"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 DispatcherServlet 创建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-example-servlet-的配置"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 example-servlet 的配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-配置-Controller-和-jsp"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 配置 Controller 和 jsp</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-配置根-context-对象代替-Servlet-xml"><span class="nav-number">4.</span> <span class="nav-text">4 配置根 context 对象代替 Servlet.xml</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-配置-Root-Context"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 配置 Root Context</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-RootContext-xml-和-Servlet-xml-的差别"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 RootContext.xml 和 Servlet.xml 的差别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-总结"><span class="nav-number">5.</span> <span class="nav-text">5 总结</span></a></li></ol></div>
             
 
           </div>

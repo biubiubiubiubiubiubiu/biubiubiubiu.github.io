@@ -108,19 +108,19 @@
 
 
 
-  <meta name="description" content="WebApplicationContext 中特殊的 bean 类型（二）— LocaleResolver本章承接前面的内容，继续讲述 LocaleResolver。 LocalResolver 的作用是解析客户的请求来自什么地区，这样就可以针对请求中的地区信息，返回不同语言的视图，以满足 Spring MVC 工程国际化的需要。而 LocalContextResolver 则继承自 LocalR">
+  <meta name="description" content="Spring MVC 也为网页应用的国际化提供了一些准备，使用 LocaleResolver 将可以解析用户 request 头部来检查用户的请求来自什么地区，用户的浏览器支持哪些语言，并且可以返回对应语言的 jsp 页面。本文将基于 LocaleResolver 的源码，解析 LocaleResolver 是如何通过请求解析，返回对应资源的。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="弯路">
+<meta property="og:title" content="WebApplicationContext 中特殊的 bean 类型（二）--- LocaleResolver">
 <meta property="og:url" content="http://yoursite.com/2018/11/01/Spring MVC 4.2.4 文档实践(三)--LocaleResolver/index.html">
 <meta property="og:site_name" content="弯路">
-<meta property="og:description" content="WebApplicationContext 中特殊的 bean 类型（二）— LocaleResolver本章承接前面的内容，继续讲述 LocaleResolver。 LocalResolver 的作用是解析客户的请求来自什么地区，这样就可以针对请求中的地区信息，返回不同语言的视图，以满足 Spring MVC 工程国际化的需要。而 LocalContextResolver 则继承自 LocalR">
+<meta property="og:description" content="Spring MVC 也为网页应用的国际化提供了一些准备，使用 LocaleResolver 将可以解析用户 request 头部来检查用户的请求来自什么地区，用户的浏览器支持哪些语言，并且可以返回对应语言的 jsp 页面。本文将基于 LocaleResolver 的源码，解析 LocaleResolver 是如何通过请求解析，返回对应资源的。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/Users/shenruofan/Desktop/屏幕快照%202018-11-06%20下午4.32.43.png">
-<meta property="og:updated_time" content="2018-11-06T08:43:20.832Z">
+<meta property="og:image" content="https://img-blog.csdn.net/20161020235455495">
+<meta property="og:updated_time" content="2018-11-19T03:01:00.248Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="弯路">
-<meta name="twitter:description" content="WebApplicationContext 中特殊的 bean 类型（二）— LocaleResolver本章承接前面的内容，继续讲述 LocaleResolver。 LocalResolver 的作用是解析客户的请求来自什么地区，这样就可以针对请求中的地区信息，返回不同语言的视图，以满足 Spring MVC 工程国际化的需要。而 LocalContextResolver 则继承自 LocalR">
-<meta name="twitter:image" content="http://yoursite.com/Users/shenruofan/Desktop/屏幕快照%202018-11-06%20下午4.32.43.png">
+<meta name="twitter:title" content="WebApplicationContext 中特殊的 bean 类型（二）--- LocaleResolver">
+<meta name="twitter:description" content="Spring MVC 也为网页应用的国际化提供了一些准备，使用 LocaleResolver 将可以解析用户 request 头部来检查用户的请求来自什么地区，用户的浏览器支持哪些语言，并且可以返回对应语言的 jsp 页面。本文将基于 LocaleResolver 的源码，解析 LocaleResolver 是如何通过请求解析，返回对应资源的。">
+<meta name="twitter:image" content="https://img-blog.csdn.net/20161020235455495">
 
 
 
@@ -139,7 +139,7 @@
   };
 </script>
 
-  <title> | 弯路</title>
+  <title>WebApplicationContext 中特殊的 bean 类型（二）--- LocaleResolver | 弯路</title>
   
 
 
@@ -309,7 +309,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h1 class="post-title" itemprop="name headline">WebApplicationContext 中特殊的 bean 类型（二）--- LocaleResolver
               
             
           </h1>
@@ -351,7 +351,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-11-06 16:43:20" itemprop="dateModified" datetime="2018-11-06T16:43:20+08:00">2018-11-06</time>
+                <time title="修改时间：2018-11-19 11:01:00" itemprop="dateModified" datetime="2018-11-19T11:01:00+08:00">2018-11-19</time>
               
             
           </span>
@@ -359,8 +359,6 @@
           
 
           
-            
-          
 
           
           
@@ -369,6 +367,8 @@
 
           
 
+          
+              <div class="post-description">Spring MVC 也为网页应用的国际化提供了一些准备，使用 LocaleResolver 将可以解析用户 request 头部来检查用户的请求来自什么地区，用户的浏览器支持哪些语言，并且可以返回对应语言的 jsp 页面。本文将基于 LocaleResolver 的源码，解析 LocaleResolver 是如何通过请求解析，返回对应资源的。</div>
           
 
         </div>
@@ -382,9 +382,23 @@
 
       
       
+        <div class="post-gallery" itemscope="" itemtype="http://schema.org/ImageGallery">
+          
+          
+            <div class="post-gallery-row">
+              <a class="post-gallery-img fancybox" href="https://img-blog.csdn.net/20161020235455495" rel="gallery_cjopv0zgb0000mkcaduq2qpvs" itemscope="" itemtype="http://schema.org/ImageObject" itemprop="url">
+                <img src="https://img-blog.csdn.net/20161020235455495" itemprop="contentUrl">
+              </a>
+            
+          
+
+          
+          </div>
+        </div>
+      
 
       
-        <h1 id="WebApplicationContext-中特殊的-bean-类型（二）—-LocaleResolver"><a href="#WebApplicationContext-中特殊的-bean-类型（二）—-LocaleResolver" class="headerlink" title="WebApplicationContext 中特殊的 bean 类型（二）— LocaleResolver"></a>WebApplicationContext 中特殊的 bean 类型（二）— LocaleResolver</h1><p>本章承接前面的内容，继续讲述 LocaleResolver。</p>
+        <p>本章承接前面的内容，继续讲述 LocaleResolver。</p>
 <p>LocalResolver 的作用是解析客户的请求来自什么地区，这样就可以针对请求中的地区信息，返回不同语言的视图，以满足 Spring MVC 工程国际化的需要。而 LocalContextResolver 则继承自 LocalResolver 接口，加入了对时区的支持。</p>
 <h2 id="LocalResolver-源码"><a href="#LocalResolver-源码" class="headerlink" title="LocalResolver 源码"></a>LocalResolver 源码</h2><p>首先来看 LocalResolver 的默认配置（AcceptHeaderLocaleResolver）的源码，该配置实现了 LocalResolver 的接口，并且重写 resolveLocale 方法，使其可以通过 Request 的 Header 字段解析请求的地区信息：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AcceptHeaderLocaleResolver</span> <span class="keyword">implements</span> <span class="title">LocaleResolver</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">AcceptHeaderLocaleResolver</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Locale <span class="title">resolveLocale</span><span class="params">(HttpServletRequest request)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> request.getLocale();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setLocale</span><span class="params">(HttpServletRequest request, HttpServletResponse response, Locale locale)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> UnsupportedOperationException(<span class="string">"Cannot change HTTP accept header - use a different locale resolution strategy"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -397,7 +411,9 @@
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">context:component-scan</span> <span class="attr">base-package</span>=<span class="string">"com.test.myapp.example"</span>/&gt;</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">&lt;!-- 其余 bean 配置 --&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!--LocaleResolver 配置--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"localeResolver"</span> <span class="attr">class</span>=<span class="string">"org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- 国际化资源文件 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"messageSource"</span> <span class="attr">class</span>=<span class="string">"org.springframework.context.support.ReloadableResourceBundleMessageSource"</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 如果资源文件放在classpath下，basename的value必须有classpath:前缀，否则报错：No message found under code... --&gt;</span></span><br><span class="line">    	<span class="comment">&lt;!-- 这个地方 value 是红色也没问题，Spring MVC 在运行的时候还是会找到这些资源文件 --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"basename"</span> <span class="attr">value</span>=<span class="string">"classpath:locales/locale"</span> /&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 如果在国际化资源文件中找不到对应代码的信息，就用这个代码作为名称返回  --&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--&lt;property name="useCodeAsDefaultMessage" value="true" /&gt;--&gt;</span></span><br><span class="line">        <span class="comment">&lt;!--&lt;property name="defaultEncoding" value="ISO-8859-1"/&gt;--&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">&lt;!-- 其余 bean 配置 --&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <h3 id="LocaleResolver-测试接口"><a href="#LocaleResolver-测试接口" class="headerlink" title="LocaleResolver 测试接口"></a>LocaleResolver 测试接口</h3><p>然后就是为我们的 LocaleResolver 配置一个接口，该接口的功能是获取发出当前的客户端支持哪些语言，并且最为偏好的语言是什么，之后再去获取对应的 properties 文件中的信息。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LocaleResolverController</span> </span>&#123;</span><br><span class="line">    <span class="meta">@RequestMapping</span>(value=<span class="string">"/accept-header-resolver.do"</span>, method = RequestMethod.GET)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> ModelAndView <span class="title">resolveLocale</span><span class="params">(HttpServletRequest request)</span> </span>&#123;</span><br><span class="line">        String clientLocale = <span class="string">""</span>;</span><br><span class="line">        <span class="comment">// 获取客户端支持的语言</span></span><br><span class="line">        Enumeration&lt;Locale&gt; locales = request.getLocales();</span><br><span class="line">        <span class="keyword">while</span> (locales.hasMoreElements()) &#123;</span><br><span class="line">            Locale locale = locales.nextElement();</span><br><span class="line">            clientLocale += locale + <span class="string">","</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        RequestContext requestContext = <span class="keyword">new</span> RequestContext(request);</span><br><span class="line">        <span class="comment">// 获取对应地区的 properties 中的信息</span></span><br><span class="line">        String value = requestContext.getMessage(<span class="string">"message.locale"</span>);</span><br><span class="line"></span><br><span class="line">        ModelAndView modelAndView = <span class="keyword">new</span> ModelAndView(<span class="string">"localeResolver"</span>);</span><br><span class="line"></span><br><span class="line">        modelAndView.addObject(<span class="string">"clientLocale"</span>, clientLocale);</span><br><span class="line">        modelAndView.addObject(<span class="string">"currentLocale"</span>, requestContext.getLocale());</span><br><span class="line">        modelAndView.addObject(<span class="string">"localeResource"</span>, value);</span><br><span class="line">        <span class="keyword">return</span> modelAndView;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>上述代码中 <figure class="highlight plain"><figcaption><span>表示客户端浏览器支持的语言，```currentLocale``` 则是客户端的偏好语言，```value``` 则表示根据客户端偏好语言取回的对应语言 properties 中的字段值。</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### LocaleResolver 测试前端页面</span><br><span class="line"></span><br><span class="line">上面测试接口返回的是一个 ModelAndView 对象，因此，我们还需要 jsp 前端文件，来输出上述的字段：</span><br><span class="line"></span><br><span class="line">```jsp</span><br><span class="line">&lt;%@ page contentType=&quot;text/html;charset=UTF-8&quot; language=&quot;java&quot; %&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;locale resolver page&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;p&gt;</span><br><span class="line">    客户端支持：$&#123;clientLocale&#125; 客户端当前地区：$&#123;currentLocale&#125;, 服务端对应内容：$&#123;localeResource&#125;</span><br><span class="line">&lt;/p&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure></p>
+<p>上述代码中 <code>clientLocale</code> 表示客户端浏览器支持的语言，<code>currentLocale</code> 则是客户端的偏好语言，<code>value</code> 则表示根据客户端偏好语言取回的对应语言 properties 中的字段值。</p>
+<h3 id="LocaleResolver-测试前端页面"><a href="#LocaleResolver-测试前端页面" class="headerlink" title="LocaleResolver 测试前端页面"></a>LocaleResolver 测试前端页面</h3><p>上面测试接口返回的是一个 ModelAndView 对象，因此，我们还需要 jsp 前端文件，来输出上述的字段：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;%@ page contentType=<span class="string">"text/html;charset=UTF-8"</span> language=<span class="string">"java"</span> %&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;locale resolver page&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;p&gt;</span><br><span class="line">    客户端支持：$&#123;clientLocale&#125; 客户端当前地区：$&#123;currentLocale&#125;, 服务端对应内容：$&#123;localeResource&#125;</span><br><span class="line">&lt;/p&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
 <p>我们已经完成了具体代码的编写，下面进入测试。</p>
 <h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>这次测试以 chrome 为例，首先查看 chrome 设置部分：</p>
 <p><img src="/Users/shenruofan/Desktop/屏幕快照 2018-11-06 下午4.32.43.png" alt="chrome 语言设置"></p>
@@ -433,8 +449,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/10/29/Spring MVC 4.2.4 文档实践(二)--请求_异常处理/" rel="next" title="">
-                <i class="fa fa-chevron-left"></i> 
+              <a href="/2018/10/29/Spring MVC 4.2.4 文档实践(二)--请求_异常处理/" rel="next" title="WebApplicationContext 中特殊的 bean 类型（一）--- 请求/异常处理">
+                <i class="fa fa-chevron-left"></i> WebApplicationContext 中特殊的 bean 类型（一）--- 请求/异常处理
               </a>
             
           </div>
@@ -443,8 +459,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/11/07/Spring MVC 4.2.4 文档实践(四)--MultipartResolver/" rel="prev" title="">
-                 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/11/07/Spring MVC 4.2.4 文档实践(四)--MultipartResolver/" rel="prev" title="WebApplicationContext 中特殊的 bean 类型（三）--- MultiPartResolver">
+                WebApplicationContext 中特殊的 bean 类型（三）--- MultiPartResolver <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -466,10 +482,6 @@
 
           </div>
           
-
-  
-
-
 
         </div>
         
@@ -564,7 +576,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#WebApplicationContext-中特殊的-bean-类型（二）—-LocaleResolver"><span class="nav-number">1.</span> <span class="nav-text">WebApplicationContext 中特殊的 bean 类型（二）— LocaleResolver</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#LocalResolver-源码"><span class="nav-number">1.1.</span> <span class="nav-text">LocalResolver 源码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LocalResolver-代码实例"><span class="nav-number">1.2.</span> <span class="nav-text">LocalResolver 代码实例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#locale-专属的-properties-文件"><span class="nav-number">1.2.1.</span> <span class="nav-text">locale 专属的 properties 文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LocaleResolver-在-Spring-配置文件中的配置"><span class="nav-number">1.2.2.</span> <span class="nav-text">LocaleResolver 在 Spring 配置文件中的配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LocaleResolver-测试接口"><span class="nav-number">1.2.3.</span> <span class="nav-text">LocaleResolver 测试接口</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试"><span class="nav-number">1.3.</span> <span class="nav-text">测试</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#LocalResolver-源码"><span class="nav-number">1.</span> <span class="nav-text">LocalResolver 源码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LocalResolver-代码实例"><span class="nav-number">2.</span> <span class="nav-text">LocalResolver 代码实例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#locale-专属的-properties-文件"><span class="nav-number">2.1.</span> <span class="nav-text">locale 专属的 properties 文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LocaleResolver-在-Spring-配置文件中的配置"><span class="nav-number">2.2.</span> <span class="nav-text">LocaleResolver 在 Spring 配置文件中的配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LocaleResolver-测试接口"><span class="nav-number">2.3.</span> <span class="nav-text">LocaleResolver 测试接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LocaleResolver-测试前端页面"><span class="nav-number">2.4.</span> <span class="nav-text">LocaleResolver 测试前端页面</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试"><span class="nav-number">3.</span> <span class="nav-text">测试</span></a></li></ol></div>
             
 
           </div>
